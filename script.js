@@ -1,30 +1,16 @@
-// ===============================
-// GitHub API + Popmotion Script
-// ===============================
-
-// ---------- GitHub API ELEMENTS ----------
 const usernameInput = document.getElementById("github-username");
 const loadReposBtn = document.getElementById("load-repos-btn");
 const repoList = document.getElementById("repo-list");
 
-// ---------- POPMOTION ELEMENTS ----------
 const demoBox = document.getElementById("demo-box");
 const restartAnimationBtn = document.getElementById("restart-animation-btn");
 
-// Popmotion global object from CDN
 const { tween, easing } = window.popmotion || {};
-
-
-// ===============================
-// GITHUB API LOGIC
-// ===============================
-// Example endpoint:
-// https://api.github.com/users/octocat/repos?sort=updated&per_page=5
 
 async function loadRepos(username) {
   if (!username) {
     repoList.innerHTML =
-      '<li class="repo-item">Please enter a GitHub username.</li>';
+      '<li class="repo-item">Enter a GitHub username.</li>';
     return;
   }
 
@@ -46,14 +32,12 @@ async function loadRepos(username) {
 
     if (!Array.isArray(repos) || repos.length === 0) {
       repoList.innerHTML =
-        '<li class="repo-item">No public repositories found for this user.</li>';
+        '<li class="repo-item">No public repositories found.</li>';
       return;
     }
 
-    // Clear current list
     repoList.innerHTML = "";
 
-    // Render each repo
     repos.forEach((repo) => {
       const li = document.createElement("li");
       li.className = "repo-item";
@@ -77,13 +61,11 @@ async function loadRepos(username) {
 
     animateGithubCard();
   } catch (error) {
-    console.error(error);
     repoList.innerHTML =
-      '<li class="repo-item">Error loading repos. Please try again later.</li>';
+      '<li class="repo-item">Error loading repositories.</li>';
   }
 }
 
-// Small "pop" animation on the GitHub card when new data loads
 function animateGithubCard() {
   if (!tween) return;
 
@@ -104,31 +86,23 @@ function animateGithubCard() {
   }, 260);
 }
 
-
-// ===============================
-// POPMOTION ANIMATION DEMO
-// ===============================
-
 let boxControls = null;
 
-// Simple tween: angle goes 0 → 360, loops forever.
-// We use Math.sin(angle) to create a vertical bounce.
 function startDemoAnimation() {
   if (!tween) return;
 
-  // Stop any existing animation
   if (boxControls && boxControls.stop) {
     boxControls.stop();
   }
 
-  const amplitude = 18; // how high it bounces in px
+  const amplitude = 18;
 
   boxControls = tween({
     from: 0,
     to: 360,
     duration: 3500,
     ease: easing.easeInOut,
-    loop: Infinity // repeat forever
+    loop: Infinity
   }).start((angle) => {
     const radians = (angle * Math.PI) / 180;
     const bounceY = Math.sin(radians * 2) * amplitude;
@@ -137,26 +111,18 @@ function startDemoAnimation() {
   });
 }
 
-
-// ===============================
-// EVENT LISTENERS
-// ===============================
-
-// Button to load repos for typed username
 loadReposBtn.addEventListener("click", () => {
   const username = usernameInput.value.trim();
   loadRepos(username);
 });
 
-// Restart animation button
 restartAnimationBtn.addEventListener("click", () => {
   startDemoAnimation();
 });
 
-// On first load: set default username and start animation
 document.addEventListener("DOMContentLoaded", () => {
-  // You can change this to your own GitHub username if you want
-  usernameInput.value = "octocat";
-  loadRepos(usernameInput.value.trim());
+  usernameInput.value = "10zinsteel";
+  loadRepos("10zinsteel");
   startDemoAnimation();
 });
+
